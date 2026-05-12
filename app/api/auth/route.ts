@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { timingSafeEqual } from 'crypto'
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
+    let body
+    try {
+      body = await request.json()
+    } catch {
+      return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
+    }
     const { password, csrfToken } = body
 
     const csrfCookie = request.cookies.get('csrf_token')
@@ -16,17 +22,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
     }
 
-    if (password !== storedPassword) {
+    const match =
+      password.length === storedPassword.length &&
+      timingSafeEqual(Buffer.from(password), Buffer.from(storedPassword))
+    if (!match) {
       return NextResponse.json({ error: 'Invalid password' }, { status: 401 })
     }
 
     const response = NextResponse.json({ success: true })
     response.cookies.set('dash_auth', '1', {
       httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 604800,
       path: '/',
       sameSite: 'strict',
-      secure: process.env.NODE_ENV === 'production',
     })
     response.cookies.delete('csrf_token')
 
