@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+:root {
+  --forest-dark: #0A1F10;
+  --forest-mid: #0D2414;
+  --review-gold: #C9A84C;
+  --text-main: #EAE6D8;
+  --text-muted: rgba(234, 230, 216, 0.4);
+  --border-gold: rgba(201, 168, 76, 0.15);
+}
+
+body {
+  background: var(--forest-dark);
+  color: var(--text-main);
+  font-family: 'Urbanist', sans-serif;
+}
+
+.font-display {
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.font-body {
+  font-family: 'Urbanist', sans-serif;
+}
+
+.font-mono {
+  font-family: 'DM Mono', monospace;
+}
