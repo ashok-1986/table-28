@@ -1,22 +1,17 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ReviewButtons } from '@/components/ReviewButtons'
 import { QR_SOURCES, type QRSource } from '@/lib/constants'
 
-function getQRSource(): QRSource {
-  if (typeof window === 'undefined') return 'unknown'
-  const params = new URLSearchParams(window.location.search)
-  const src = params.get('src')
-  return src && QR_SOURCES.includes(src as any) ? src as QRSource : 'unknown'
-}
-
 export default function LandingPage() {
-  const [source, setSource] = useState<QRSource>('unknown')
-
-  useEffect(() => {
-    setSource(getQRSource())
-  }, [])
+  const [source] = useState<QRSource>(() => {
+    if (typeof window === 'undefined') return 'unknown'
+    const src = new URLSearchParams(window.location.search).get('src')
+    return (src && QR_SOURCES.includes(src as typeof QR_SOURCES[number]))
+      ? (src as QRSource)
+      : 'unknown'
+  })
 
   return (
     <main className="min-h-screen flex flex-col">
