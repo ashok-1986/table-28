@@ -1,22 +1,37 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+
+function generateToken(): string {
+  const array = new Uint8Array(32)
+  crypto.getRandomValues(array)
+  return Array.from(array, (b) => b.toString(16).padStart(2, '0')).join('')
+}
 
 export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [csrfToken, setCsrfToken] = useState('')
   const router = useRouter()
+
+  useEffect(() => {
+    const token = generateToken()
+    setCsrfToken(token)
+    document.cookie = `csrf_token=${token}; path=/; SameSite=Strict; httpOnly`
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
 
+    if (!csrfToken) return
+
     try {
       const res = await fetch('/api/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ password, csrfToken }),
       })
 
       if (res.ok) {
@@ -24,7 +39,7 @@ export default function LoginPage() {
       } else {
         setError('Invalid password')
       }
-    } catch (err) {
+    } catch {
       setError('Something went wrong')
     }
   }
