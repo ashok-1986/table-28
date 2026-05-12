@@ -1,11 +1,18 @@
 import { REVIEW_TARGET, COMPETITOR } from '@/lib/constants'
+import { cookies } from 'next/headers'
 
 export const dynamic = 'force-dynamic'
 
 async function getReviewData() {
+  const cookieStore = cookies()
+  const authCookie = cookieStore.get('dash_auth')
+
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/reviews`, {
       next: { revalidate: 0 },
+      headers: {
+        Cookie: `dash_auth=${authCookie?.value}`,
+      },
     })
     if (!res.ok) throw new Error('Failed to fetch')
     return await res.json()
