@@ -13,6 +13,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [csrfToken, setCsrfToken] = useState('')
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -23,9 +24,9 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (loading || !csrfToken) return
     setError('')
-
-    if (!csrfToken) return
+    setLoading(true)
 
     try {
       const res = await fetch('/api/auth', {
@@ -41,6 +42,8 @@ export default function LoginPage() {
       }
     } catch {
       setError('Something went wrong')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -52,23 +55,35 @@ export default function LoginPage() {
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter password"
-            className="w-full px-4 py-3 bg-[#141410] border border-[#5A5644] rounded text-[#EAE6D8] font-body placeholder:text-[#5A5644] focus:outline-none focus:border-[#C9A84C]"
-          />
+          <div>
+            <label htmlFor="password" className="sr-only">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter password"
+              className="w-full px-4 py-3 bg-[#141410] border border-[#5A5644] rounded text-[#EAE6D8] font-body placeholder:text-[#5A5644] focus:outline-none focus:border-[#C9A84C]"
+            />
+          </div>
 
           {error && (
-            <p className="text-[#C04A4A] text-sm font-body">{error}</p>
+            <p role="alert" className="text-[#C04A4A] text-sm font-body">
+              {error}
+            </p>
           )}
 
           <button
             type="submit"
-            className="w-full py-3 bg-[#C9A84C] text-[#0C0C0A] font-body font-semibold text-sm uppercase tracking-wider rounded hover:opacity-90 transition-opacity"
+            disabled={loading}
+            aria-disabled={loading}
+            aria-busy={loading}
+            className="w-full py-3 bg-[#C9A84C] text-[#0C0C0A] font-body font-semibold text-sm uppercase tracking-wider rounded hover:opacity-90 transition-opacity disabled:opacity-50"
           >
-            Sign In
+            {loading ? 'Signing in…' : 'Sign In'}
           </button>
         </form>
       </div>
