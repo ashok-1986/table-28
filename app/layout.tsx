@@ -1,6 +1,29 @@
 import type { Metadata } from 'next'
 import { PostHogProvider } from '@/components/PostHogProvider'
+import { Cormorant_Garamond, Urbanist, DM_Mono } from 'next/font/google'
 import './globals.css'
+
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['300', '400', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-cormorant',
+  display: 'swap',
+})
+
+const urbanist = Urbanist({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-urbanist',
+  display: 'swap',
+})
+
+const dmMono = DM_Mono({
+  subsets: ['latin'],
+  weight: ['300', '400', '500'],
+  variable: '--font-dm-mono',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Table Twenty Eight | Leave a Review',
@@ -13,16 +36,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Mono:wght@300;400;500&family=Urbanist:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="min-h-screen">
+    <html lang="en" className={`${cormorant.variable} ${urbanist.variable} ${dmMono.variable}`}>
+      <body className="min-h-screen font-body">
         <PostHogProvider>{children}</PostHogProvider>
       </body>
     </html>

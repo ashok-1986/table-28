@@ -12,17 +12,17 @@
 body {
   background: var(--forest-dark);
   color: var(--text-main);
-  font-family: 'Urbanist', sans-serif;
+  font-family: var(--font-urbanist), sans-serif;
 }
 
 .font-display {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-cormorant), serif;
 }
 
 .font-body {
-  font-family: 'Urbanist', sans-serif;
+  font-family: var(--font-urbanist), sans-serif;
 }
 
 .font-mono {
-  font-family: 'DM Mono', monospace;
+  font-family: var(--font-dm-mono), monospace;
 }
