@@ -17,9 +17,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ['Cormorant Garamond', 'serif'],
-        body: ['Urbanist', 'sans-serif'],
-        mono: ['DM Mono', 'monospace'],
+        display: ['var(--font-cormorant)', 'serif'],
+        body: ['var(--font-urbanist)', 'sans-serif'],
+        mono: ['var(--font-dm-mono)', 'monospace'],
       },
     },
   },
