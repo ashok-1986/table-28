@@ -33,7 +33,6 @@ export default async function DashboardPage() {
   const totalT28 = t28Google + t28TripAdvisor
   const progress = Math.min((totalT28 / REVIEW_TARGET) * 100, 100)
   const gap = mharsantaGoogle - totalT28
-  const lastUpdated = data?.last_updated ? new Date(data.last_updated).toLocaleString() : 'N/A'
 
   return (
     <main className="min-h-screen bg-[#0C0C0A] text-[#EAE6D8] p-6">
@@ -56,7 +55,14 @@ export default async function DashboardPage() {
                 <span>Progress to {REVIEW_TARGET} goal</span>
                 <span>{progress.toFixed(1)}%</span>
               </div>
-              <div className="h-2 bg-[#0C0C0A] rounded-full overflow-hidden">
+              <div
+                className="h-2 bg-[#0C0C0A] rounded-full overflow-hidden"
+                role="progressbar"
+                aria-valuenow={Math.round(progress)}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label="Progress to review goal"
+              >
                 <div
                   className="h-full bg-[#4E8C6A] transition-all"
                   style={{ width: `${progress}%` }}
@@ -92,15 +98,36 @@ export default async function DashboardPage() {
               Competitor Gap
             </h2>
             <div className="flex items-baseline gap-3">
-              <span className="text-4xl font-mono">{gap > 0 ? gap : 0}</span>
-              <span className="font-body text-[#9A9278]">
-                behind {COMPETITOR.name} ({mharsantaGoogle})
-              </span>
+              {gap > 0 ? (
+                <>
+                  <span className="text-4xl font-mono">{gap}</span>
+                  <span className="font-body text-[#9A9278]">
+                    behind {COMPETITOR.name} ({mharsantaGoogle})
+                  </span>
+                </>
+              ) : gap < 0 ? (
+                <>
+                  <span className="text-4xl font-mono text-[#C9A84C]">
+                    {Math.abs(gap)}
+                  </span>
+                  <span className="font-body text-[#C9A84C]">
+                    ahead of {COMPETITOR.name} ({mharsantaGoogle})
+                  </span>
+                </>
+              ) : (
+                <span className="text-2xl font-mono text-[#C9A84C]">
+                  Level with {COMPETITOR.name} ({mharsantaGoogle})
+                </span>
+              )}
             </div>
           </section>
 
           <footer className="text-center text-sm font-mono text-[#5A5644]">
-            Last updated: {lastUpdated}
+            Last updated: {data?.last_updated ? (
+              <time dateTime={data.last_updated}>{new Date(data.last_updated).toLocaleString()}</time>
+            ) : (
+              'N/A'
+            )}
           </footer>
         </div>
       </div>
