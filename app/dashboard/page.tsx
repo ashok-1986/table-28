@@ -1,7 +1,15 @@
 import { REVIEW_TARGET, COMPETITOR } from '@/lib/constants'
 import { cookies } from 'next/headers'
 
-export const dynamic = 'force-dynamic'
+/**
+ * PERFORMANCE OPTIMIZATION:
+ * Enable caching for the internal review data fetch.
+ * While the presence of cookies() makes the route dynamic, memoizing the internal
+ * fetch call ensures that the expensive external API orchestration in /api/reviews
+ * is only performed once per hour.
+ * Expected impact: Dashboard loads in ~50ms instead of waiting for multiple external APIs.
+ */
+export const revalidate = 3600
 
 async function getReviewData() {
   const cookieStore = cookies()
@@ -9,7 +17,7 @@ async function getReviewData() {
 
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/reviews`, {
-      next: { revalidate: 0 },
+      next: { revalidate: 3600 },
       headers: {
         Cookie: `dash_auth=${authCookie?.value}`,
       },
