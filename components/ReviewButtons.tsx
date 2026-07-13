@@ -38,13 +38,13 @@ export function ReviewButtons({ source }: ReviewButtonsProps) {
     <div className="flex flex-col gap-4">
       <button
         onClick={() => handleClick('google')}
-        className="w-full py-4 px-6 bg-[#4285F4] text-white font-body font-semibold text-sm tracking-wider uppercase rounded-md hover:opacity-90 transition-opacity"
+        className="w-full py-4 px-6 bg-[#4285F4] text-white font-body font-semibold text-sm tracking-wider uppercase rounded-md hover:opacity-90 transition-opacity focus-visible:ring-2 focus-visible:ring-white outline-none"
       >
         Leave a Google Review
       </button>
       <button
         onClick={() => handleClick('tripadvisor')}
-        className="w-full py-4 px-6 bg-[#00AA6C] text-white font-body font-semibold text-sm tracking-wider uppercase rounded-md hover:opacity-90 transition-opacity"
+        className="w-full py-4 px-6 bg-[#00AA6C] text-white font-body font-semibold text-sm tracking-wider uppercase rounded-md hover:opacity-90 transition-opacity focus-visible:ring-2 focus-visible:ring-white outline-none"
       >
         Leave a TripAdvisor Review
       </button>
