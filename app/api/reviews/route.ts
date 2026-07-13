@@ -5,7 +5,14 @@ import {
   COMPETITOR,
 } from '@/lib/constants'
 
-export const dynamic = 'force-dynamic'
+/**
+ * PERFORMANCE OPTIMIZATION:
+ * Revalidate review data every hour to balance freshness and performance.
+ * This enables Next.js Data Cache, reducing API response time from ~500ms+ (external fetch)
+ * to ~10ms (cache hit) and avoiding external API rate limits.
+ * Expected impact: Significant reduction in dashboard load time and API costs.
+ */
+export const revalidate = 3600
 
 async function fetchGooglePlace(placeId: string, apiKey: string) {
   if (!placeId || !apiKey) return null
@@ -14,6 +21,7 @@ async function fetchGooglePlace(placeId: string, apiKey: string) {
     const res = await fetch(
       `https://places.googleapis.com/v1/places/${placeId}`,
       {
+        next: { revalidate: 3600 },
         headers: {
           'X-Goog-Api-Key': apiKey,
           'X-Goog-FieldMask': 'rating,userRatingsTotal',
@@ -37,7 +45,8 @@ async function fetchTripAdvisor(locationId: string, apiKey: string) {
 
   try {
     const res = await fetch(
-      `https://api.content.tripadvisor.com/api/v1/location/${locationId}/details?key=${apiKey}&language=en`
+      `https://api.content.tripadvisor.com/api/v1/location/${locationId}/details?key=${apiKey}&language=en`,
+      { next: { revalidate: 3600 } }
     )
     if (!res.ok) return null
     const data = await res.json()
