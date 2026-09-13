@@ -29,14 +29,14 @@ export function ReviewButtons({ source }: ReviewButtonsProps) {
     } catch (err) {
       console.error('PostHog capture failed:', err)
     }
-
-    const url = platform === 'google' ? GOOGLE_REVIEW_URL : TRIPADVISOR_URL
-    window.location.href = url
   }
 
   return (
     <div className="flex flex-col gap-4">
-      <button
+      <a
+        href={GOOGLE_REVIEW_URL}
+        target="_blank"
+        rel="noopener noreferrer"
         onClick={() => handleClick('google')}
         className="w-full py-4 px-6 bg-[#4285F4] text-white font-body font-semibold text-sm tracking-wider uppercase rounded-md hover:opacity-90 transition-all hover:scale-[1.02] active:scale-[0.98] duration-200 focus-visible:ring-2 focus-visible:ring-white outline-none flex items-center justify-center gap-3 shadow-md"
       >
@@ -47,8 +47,12 @@ export function ReviewButtons({ source }: ReviewButtonsProps) {
           <path fill="#FBBC05" d="M10.54 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24s.92 7.54 2.56 10.78l7.98-6.19z"/>
         </svg>
         <span>Leave a Google Review</span>
-      </button>
-      <button
+        <span className="sr-only">(opens in a new tab)</span>
+      </a>
+      <a
+        href={TRIPADVISOR_URL}
+        target="_blank"
+        rel="noopener noreferrer"
         onClick={() => handleClick('tripadvisor')}
         className="w-full py-4 px-6 bg-[#00AA6C] text-white font-body font-semibold text-sm tracking-wider uppercase rounded-md hover:opacity-90 transition-all hover:scale-[1.02] active:scale-[0.98] duration-200 focus-visible:ring-2 focus-visible:ring-white outline-none flex items-center justify-center gap-3 shadow-md"
       >
@@ -69,7 +73,8 @@ export function ReviewButtons({ source }: ReviewButtonsProps) {
           </g>
         </svg>
         <span>Leave a TripAdvisor Review</span>
-      </button>
+        <span className="sr-only">(opens in a new tab)</span>
+      </a>
     </div>
   )
 }
