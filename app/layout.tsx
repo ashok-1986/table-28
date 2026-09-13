@@ -43,6 +43,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${cormorant.variable} ${urbanist.variable} ${dmMono.variable}`}>
+      <head>
+        {/*
+          * Preconnect to Google and TripAdvisor review destination domains.
+          * This establishes DNS, TCP, and TLS connections ahead of time,
+          * reducing navigation latency by ~100-300ms when customers tap review buttons.
+          */}
+        <link rel="preconnect" href="https://www.google.com" />
+        <link rel="preconnect" href="https://www.tripadvisor.co.uk" />
+        <link rel="dns-prefetch" href="https://www.google.com" />
+        <link rel="dns-prefetch" href="https://www.tripadvisor.co.uk" />
+      </head>
       <body className={`${urbanist.className} min-h-screen`}>
         <PostHogProvider>{children}</PostHogProvider>
       </body>
