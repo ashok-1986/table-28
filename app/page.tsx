@@ -1,17 +1,20 @@
-'use client'
-
-import { useState } from 'react'
 import { ReviewButtons } from '@/components/ReviewButtons'
 import { QR_SOURCES, type QRSource } from '@/lib/constants'
 
-export default function LandingPage() {
-  const [source] = useState<QRSource>(() => {
-    if (typeof window === 'undefined') return 'unknown'
-    const src = new URLSearchParams(window.location.search).get('src')
-    return (src && QR_SOURCES.includes(src as typeof QR_SOURCES[number]))
-      ? (src as QRSource)
-      : 'unknown'
-  })
+interface PageProps {
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+
+/**
+ * Server Component landing page.
+ * Parsing searchParams on the server avoids rendering static shell layout as a client component,
+ * eliminates hydration mismatches, and reduces JavaScript bundle size shipped to the browser.
+ */
+export default function LandingPage({ searchParams }: PageProps) {
+  const rawSrc = typeof searchParams.src === 'string' ? searchParams.src : undefined
+  const source: QRSource = (rawSrc && QR_SOURCES.includes(rawSrc as typeof QR_SOURCES[number]))
+    ? (rawSrc as QRSource)
+    : 'unknown'
 
   return (
     <main className="min-h-screen flex flex-col">
